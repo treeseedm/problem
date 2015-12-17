@@ -1,0 +1,59 @@
+package com.sankuai.xmpp.roommanager;
+
+
+/**
+ * Created by mahaifeng on 15/12/15.
+ */
+public class BookRoomFreeTimeFragment extends BaseFragment {
+
+    private ProgressBar mProgressBar;
+    private boolean mHasInitView = false;
+    private boolean mHasLoaded = false;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        mHasInitView = true;
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    private Handler timeHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (mHasInitView) {
+                loadData();
+            } else
+                timeHandler.sendEmptyMessageDelayed(0, 100);
+        }
+    };
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            timeHandler.sendEmptyMessage(0);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        timeHandler.removeCallbacksAndMessages(null);
+        super.onPause();
+    }
+
+    private void loadData() {
+        DxLog.d(this, "加载数据----");
+        mProgressBar.setVisibility(View.VISIBLE);
+        mHasLoaded = true;
+    }
+}
