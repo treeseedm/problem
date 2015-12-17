@@ -1,0 +1,5 @@
+1,执行demo是报
+    undefined is not an object (evaluating 'require('NativeModules').UIManager.RCTMap.Constants')
+    解决方法：
+         在Libraries/Components/MapView/MapView.js文件里，将RCTMapConstants = require('NativeModules').UIManager.RCTMap.Constants;句话替换为：
+         RCTMapConstants = require('NativeModules').UIManager.RCTMap?require('NativeModules').UIManager.RCTMap.Constants:undefined;
