@@ -4,5 +4,6 @@
     不设置setBackgroundDrawable,并且，在popview加上setOnKeyListener事件，判断按键是不是back
 第三种情况：点击周围不消失，但是可以相应导航栏及物理键事件
      目前没有实现这种情况，只能自己写布局实现
+其他的采用默认值不需要更改
 
     
