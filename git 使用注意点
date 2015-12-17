@@ -1,0 +1,19 @@
+git提交代码
+1，git stash save "aaa"
+2,git fetch
+3,git rebase 分支名
+4,git stash pop 
+5,git add .
+6,git commit -m"注释"
+7,git push myfork(仓库名)
+问题：
+1,解决冲突后必须add。然后才能fetch，否则代码就会被覆盖
+2,git push myfork
+To ssh://git@git.sankuai.com/~mahaifeng/androidv2.git
+ ! [rejected]        ma_new_dev_3.9 -> ma_new_dev_3.9 (non-fast-forward)
+error: failed to push some refs to 'ssh://git@git.sankuai.com/~mahaifeng/androidv2.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+此时先执行git stash clear,然后删除掉自己的远程分支，在执行git push myfork
