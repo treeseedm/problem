@@ -1,0 +1,140 @@
+package com.sankuai.xmpp.workreportmanager;
+
+public class WorkReportListActivity extends BaseActivity implements View.OnClickListener, AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
+    private View mFooterView;
+    private boolean mIsLoadMore = false;
+    private boolean mIsLoading = false;
+    private long mLastRId = 0;
+    private boolean mHasMore = true;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.workreport_activity_layout_list);
+        initTitleBar();
+        initView();
+        setData();
+    }
+
+    private void initTitleBar() {
+       //初始化头部信息
+    }
+
+    private void initView() {
+      //初始化view
+    }
+
+    private void setData() {
+        if (NetworkUtils.getAvailableNetworkInfo(this) == null) {
+            Toast.makeText(this, R.string.sort_micro_items, Toast.LENGTH_SHORT).show();
+            mFooterView.setVisibility(View.GONE);
+            if(mAdapter.getList().size()==0)
+            setEmptyView(1);
+            return;
+        }
+        if (mIsLoading) {
+            Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        mIsLoading = true;
+       //***********网络请求***************//
+        if (!mIsLoadMore)
+            mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Subscribe
+    public void getReportsByCondition(WorkReportListResponse response) {
+        try {
+            mIsLoading = false;
+            mProgressBar.setVisibility(View.GONE);
+            if (response.rescode == 0) {
+                mLastRId = response.lastRId;
+                if (mIsLoadMore)
+                    mAdapter.appendReportList(response.reports);
+                else {
+
+                    if (response.reports == null || response.reports.size() == 0) {
+                        response.reports = new ArrayList<Report>();
+                        if (mUserPostion == 1 && mTypePostion == 0 && mDatePostion == 0) {
+                            setEmptyView(2);
+                        } else {
+                            setEmptyView(3);
+                        }
+                    }
+                    mAdapter.refreshReportList(response.reports);
+                }
+                if (response.reports == null || response.reports.size() < 20) {
+                    mHasMore = false;
+                    mFooterView.setVisibility(View.GONE);
+                } else {
+                    mHasMore = true;
+                }
+            } else {
+                mFooterView.setVisibility(View.GONE);
+                Toast.makeText(WorkReportListActivity.this, TextUtils.isEmpty(response.message) ? getString(R.string.tips_service_error) : response.message, Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            mFooterView.setVisibility(View.GONE);
+            DxLog.d(this, "解析数据失败");
+        }
+    }
+
+    private void setEmptyView(int flag) {
+        if (mLvworkreport.getEmptyView() == null)
+            mLvworkreport.setEmptyView(findViewById(R.id.Rl_empty));
+        ImageView emptyImage = (ImageView) findViewById(R.id.iv_empty);
+        TextView emptyTipTop = (TextView) findViewById(R.id.tv_tip_top);
+        TextView emptyTipBottom = (TextView) findViewById(R.id.tv_tip_bottom);
+
+        Button btnCreate = (Button) findViewById(R.id.btn_tocreate);
+
+        switch (flag) {
+            case 1://网络异常
+                emptyTipTop.setText(getString(R.string.wr_network_error_tip_top));
+                emptyTipBottom.setText(getString(R.string.wr_network_error_tip_bottom));
+                btnCreate.setVisibility(View.GONE);
+                emptyImage.setImageResource(R.drawable.workreport_icon_list_empty);
+                break;
+            case 2://同组
+                emptyTipTop.setText(getString(R.string.wr_listempty_tip2_top));
+                emptyTipBottom.setText(getString(R.string.wr_listempty_tip2_bottom));
+                btnCreate.setVisibility(View.VISIBLE);
+                btnCreate.setOnClickListener(this);
+                emptyImage.setImageResource(R.drawable.workreport_icon_create);
+                break;
+            case 3://其他情况
+                emptyTipTop.setText(getString(R.string.wr_listempty_tip_top));
+                emptyTipBottom.setText(getString(R.string.wr_listempty_tip_bottom));
+                btnCreate.setVisibility(View.GONE);
+                emptyImage.setImageResource(R.drawable.workreport_icon_list_empty);
+                break;
+            default:
+                break;
+        }
+        mLvworkreport.getEmptyView().setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (scrollState == SCROLL_STATE_IDLE && mLastItemVisible && mHasMore) {
+            mFooterView.setVisibility(View.VISIBLE);
+            mIsLoadMore = true;
+            setData();
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        mLastItemVisible = (totalItemCount > 0) && (firstVisibleItem + visibleItemCount >= totalItemCount - 1);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+      
+    }
+}
