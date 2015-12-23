@@ -1,0 +1,4 @@
+问题：scrollview里面动态填充内容后会自动滚动到下面，影响使用
+解决办法：在scrollview的下一层加上
+        android:focusable="true"
+        android:focusableInTouchMode="true",使其获取焦点
