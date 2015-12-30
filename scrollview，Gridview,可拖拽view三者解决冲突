@@ -1,0 +1,19 @@
+原理：
+假设最高层View叫OuterLayout，中间层View叫InnerLayout，最底层View叫MyVIew。调用顺序是这样的（假设各个函数返回的都是false）
+OuterLayout.onInterceptTouchEvent->InnerLayout.onInterceptTouchEvent->MyView.onTouchEvent->InnerLayout.onTouchEvent->OuterLayout.onTouchEvent。
+
+解决方法：
+在可拖动view中实现：
+public boolean onTouch(View v, MotionEvent event) {  
+     switch (event.getAction()) {  
+     case MotionEvent.ACTION_MOVE:   
+         pager.requestDisallowInterceptTouchEvent(true);  //注意这句话
+         break;  
+     case MotionEvent.ACTION_UP:  
+     case MotionEvent.ACTION_CANCEL:  
+         pager.requestDisallowInterceptTouchEvent(false);  //注意这句话
+         break;  
+     }  
+}  
+当用户按下的时候，我们告诉父组件，不要拦截我的事件（这个时候子组件是可以正常响应事件的），拿起之后就会告诉父组件可以阻止。
+
