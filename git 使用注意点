@@ -18,3 +18,4 @@ hint: 'git pull ...') before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 此时先执行git stash clear,然后删除掉自己的远程分支，在执行git push myfork
 3，如果冲突后需要对齐，先reset到指定版本，然后再add to vcs,在stash-fetch-commit-push;
+4,本地看不到远程分支需要fetch
