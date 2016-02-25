@@ -1,0 +1,3 @@
+drawable目录下的selector设置背景色要用drawable
+color目录下的selector设置色值要用color，
+不可混淆
