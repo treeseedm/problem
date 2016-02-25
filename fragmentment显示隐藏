@@ -1,0 +1,24 @@
+1，先add ，
+2，通过tag，然后show,或hide
+代码:
+  FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.fl_container, mNoteFragment, TAG_NOTE);
+        transaction.commit();
+   Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (fragment == null) {
+            if (TAG_NOTE.equals(tag)) {
+                fragment = new NoteListFragment();
+            } else if (TAG_MY.equals(tag)) {
+                fragment = new MyFragment();
+            } else if (TAG_FRIEND.equals(tag)) {
+                fragment = new MyFragment();
+            }
+            transaction.add(R.id.fl_container, fragment, tag);
+        }
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        for (Fragment fragment1 : fragments) {
+            transaction.hide(fragment1);
+        }
+        transaction.show(fragment);
+        transaction.commit();
