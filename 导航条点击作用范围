@@ -1,0 +1,4 @@
+1，采用imageButton
+2, 给imageButton 设置src,这样就确保图片不会拉伸
+3，设置background为@null ，保证没有按钮边框
+4, 设置高度为match_parent,宽度warp_content,确保点击区域
