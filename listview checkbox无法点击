@@ -1,0 +1,4 @@
+android:focusable="false"
+android:clickable="false"
+android:focusableInTouchMode="false"
+设置checkbox三个属性
