@@ -1,0 +1,2 @@
+checkbox按钮默认靠左，即使设置了Padding等也不会起作用
+解决方法：使用drawabletop等设置，同事设置button=@null
