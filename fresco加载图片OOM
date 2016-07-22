@@ -1,0 +1,1 @@
+fresco设置了setResizeOptions任然出现OOM，原因是fresco对Jepg的图片可以剪裁，但对Png等图片无法剪裁，需要设置 ImagePipelineConfig.newBuilder(context). .setDownsampleEnabled(true).build();
